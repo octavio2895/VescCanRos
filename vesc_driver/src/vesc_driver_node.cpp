@@ -36,23 +36,30 @@
 #include <ros/ros.h>
 
 #include "vesc_driver/vesc_driver.h"
+// #include "../vesc_can_interface/src/vesc_can_interface.h" 
 
 int main(int argc, char **argv) {
+    vesc_can_driver::VescCanInterface vesc_dev_;
+    vesc_dev_.start(0x02);
     ros::init(argc, argv, "vesc_driver_node");
     ros::NodeHandle nh;
     ros::NodeHandle private_nh("~");
 
-    vesc_driver::VescDriver vesc_driver(nh, private_nh);
+    vesc_driver::VescDriver vesc_driver(vesc_dev_, &nh, &private_nh);
     ROS_INFO_STREAM("started VESC driver");
 
+    ros::spin();
+ /* 
     ros::AsyncSpinner spinner(1);
     spinner.start();
     while (ros::ok()) {
-        vesc_driver.waitForStateAndPublish();
+        // vesc_driver.waitForStateAndPublish();
+      asm ("nop");
     }
+  */
     ROS_INFO_STREAM("stopping VESC driver");
     vesc_driver.stop();
-    spinner.stop();
+    // spinner.stop();
 
     return 0;
 }

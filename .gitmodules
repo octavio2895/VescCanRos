@@ -1,0 +1,6 @@
+[submodule "vesc_can_interface"]
+	path = vesc_can_interface
+	url = https://github.com/octavio2895/VescCanInterface
+[submodule "vesc_driver/vesc_can_interface"]
+	path = vesc_driver/vesc_can_interface
+	url = https://github.com/octavio2895/VescCanInterface
