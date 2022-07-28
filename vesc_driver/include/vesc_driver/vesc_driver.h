@@ -49,8 +49,6 @@
 #include <std_msgs/Float64.h>
 #include <vesc_msgs/VescStateStamped.h>
 
-#include "vesc_driver/vesc_interface.h"
-#include "vesc_driver/vesc_packet.h"
 #include "../vesc_can_interface/src/vesc_can_interface.h" 
 
 // using namespace vesc_can_driver;
@@ -61,52 +59,52 @@ class VescDriver
 {
 public:
   // VescDriver(ros::NodeHandle &nh, ros::NodeHandle &private_nh);
-  vesc_can_driver::VescCanInterface *vesc_can_;
-  VescDriver(vesc_can_driver::VescCanInterface &vesc_can_, ros::NodeHandle *nh, ros::NodeHandle *private_nh);
-
-    // void waitForStateAndPublish();
+  VescDriver(ros::NodeHandle &nh, ros::NodeHandle &private_nh);
+  void waitForStateAndPublish();
   void stop();
+
 private:
   // interface to the VESC
-  // VescInterface vesc_;
-  // void vescErrorCallback(const std::string& error);
+  vesc_can_driver::VescCanInterface vesc_;
+  void vescErrorCallback(const std::string& error);
   //
   // // limits on VESC commands
-  // struct CommandLimit
-  // {
-  //   CommandLimit(const ros::NodeHandle& nh, const std::string& str,
-  //                const boost::optional<double>& min_lower = boost::optional<double>(),
-  //                const boost::optional<double>& max_upper = boost::optional<double>());
-  //   double clip(double value);
-  //   std::string name;
-  //   boost::optional<double> lower;
-  //   boost::optional<double> upper;
-  // };
-  // CommandLimit duty_cycle_limit_;
-  // CommandLimit current_limit_;
-  // CommandLimit brake_limit_;
-  // CommandLimit speed_limit_;
-  // CommandLimit position_limit_;
-  //
+  struct CommandLimit
+  {
+    CommandLimit(const ros::NodeHandle& nh, const std::string& str,
+                 const boost::optional<double>& min_lower = boost::optional<double>(),
+                 const boost::optional<double>& max_upper = boost::optional<double>());
+    double clip(double value);
+    std::string name;
+    boost::optional<double> lower;
+    boost::optional<double> upper;
+  };
+  CommandLimit duty_cycle_limit_;
+  CommandLimit current_limit_;
+  CommandLimit brake_limit_;
+  CommandLimit speed_limit_;
+  CommandLimit position_limit_;
+
   // ROS services
-  // ros::Publisher state_pub_;
+  ros::Publisher state_pub_;
   ros::Subscriber duty_cycle_sub_;
-  // ros::Subscriber current_sub_;
-  // ros::Subscriber brake_sub_;
-  // ros::Subscriber speed_sub_;
-  // ros::Subscriber position_sub_;
+  ros::Subscriber current_sub_;
+  ros::Subscriber brake_sub_;
+  ros::Subscriber speed_sub_;
+  ros::Subscriber position_sub_;
 
 
-  // VescStatusStruct vesc_status = {0};
+  vesc_can_driver::VescStatusStruct vesc_status = {0};
+  std::string inter_name;
+  int can_dev_id;
+  int can_host_id;
 
   // ROS callbacks
-  // void dutyCycleCallback(const std_msgs::Float64::ConstPtr& duty_cycle);
-  void dutyCycleCallbackCan(const std_msgs::Float64::ConstPtr& duty_cycle);
-  // void currentCallback(const std_msgs::Float64::ConstPtr& current);
-  // void brakeCallback(const std_msgs::Float64::ConstPtr& brake);
-  // void speedCallback(const std_msgs::Float64::ConstPtr& speed);
-  // void speedCallbackCan(const std_msgs::Float64::ConstPtr& speed);
-  // void positionCallback(const std_msgs::Float64::ConstPtr& position);
+  void dutyCycleCallback(const std_msgs::Float64::ConstPtr& duty_cycle);
+  void currentCallback(const std_msgs::Float64::ConstPtr& current);
+  void brakeCallback(const std_msgs::Float64::ConstPtr& brake);
+  void speedCallback(const std_msgs::Float64::ConstPtr& speed);
+  void positionCallback(const std_msgs::Float64::ConstPtr& position);
 };
 
 }  // namespace vesc_driver

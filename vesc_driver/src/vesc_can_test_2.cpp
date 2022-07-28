@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
   std::cout << "Started demo, creating instace" << std::endl;
   vesc_dev.host_id = 0x78;
   std::cout << "Init thread" << std::endl;
-  vesc_dev.start(0x02);
+  // vesc_dev.start(0x02);
   printf("Host id:%d\n", vesc_dev.host_id);
   ros::spin();
   ROS_INFO_STREAM("stopping VESC driver");
