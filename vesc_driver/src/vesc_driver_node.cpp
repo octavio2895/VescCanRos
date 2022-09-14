@@ -39,11 +39,23 @@
 // #include "../vesc_can_interface/src/vesc_can_interface.h" 
 
 int main(int argc, char **argv) {
-    ros::init(argc, argv, "vesc_driver_node");
+    ros::init(argc, argv, "vesc_driver_node", ros::init_options::AnonymousName);
     ros::NodeHandle nh;
     ros::NodeHandle private_nh("~");
 
-    vesc_driver::VescDriver vesc_driver(nh, private_nh);
+    std::string inter_name;
+    int can_dev_id;
+
+    if(!private_nh.param("can_interface", inter_name, std::string("can0")))
+    {
+      ROS_WARN_STREAM("No can interaface found in parameter server, using " << inter_name << ".");
+    }
+    if(!private_nh.param("can_dev_id", can_dev_id,0x4B))
+    {
+      ROS_WARN_STREAM("No can device id found in parameter server, using " << can_dev_id << ".");
+    }
+
+    vesc_driver::VescDriver vesc_driver(nh, private_nh, inter_name, can_dev_id);
     ROS_INFO_STREAM("started VESC driver");
 
     ros::AsyncSpinner spinner(1);

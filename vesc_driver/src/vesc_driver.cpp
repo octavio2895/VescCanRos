@@ -36,33 +36,24 @@
 #include "vesc_driver/vesc_driver.h"
 
 namespace vesc_driver {
-    VescDriver::VescDriver(ros::NodeHandle &nh, ros::NodeHandle &private_nh)
+    VescDriver::VescDriver(ros::NodeHandle &nh, ros::NodeHandle &private_nh, std::string inter_name, int can_dev_id)
               :vesc_(),duty_cycle_limit_(private_nh, "duty_cycle", -1.0, 1.0), current_limit_(private_nh, "current"),
               brake_limit_(private_nh, "brake"), speed_limit_(private_nh, "speed"),
               position_limit_(private_nh, "position") 
     {
-      // get vesc serial port address
-      if(!nh.param("/can_interface", inter_name, std::string("can0")))
-      {
-        ROS_WARN_STREAM("No can interaface found in parameter server, using " << inter_name << ".");
-      }
-      if(!nh.param("/can_dev_id", can_dev_id, 0x02))
-      {
-        ROS_WARN_STREAM("No can device id found in parameter server, using " << can_dev_id << ".");
-      }
 
       vesc_.start(inter_name, can_dev_id);
 
 
       // create vesc state (telemetry) publisher
-      state_pub_ = nh.advertise<vesc_msgs::VescStateStamped>("sensors/core", 10);
+      state_pub_ = private_nh.advertise<vesc_msgs::VescStateStamped>("sensors/core", 10);
 
       // subscribe to motor and servo command topics
-      duty_cycle_sub_ = nh.subscribe("commands/motor/duty_cycle", 10, &VescDriver::dutyCycleCallback, this);
-      current_sub_ = nh.subscribe("commands/motor/current", 10, &VescDriver::currentCallback, this);
-      brake_sub_ = nh.subscribe("commands/motor/brake", 10, &VescDriver::brakeCallback, this);
-      speed_sub_ = nh.subscribe("commands/motor/speed", 10, &VescDriver::speedCallback, this);
-      position_sub_ = nh.subscribe("commands/motor/position", 10, &VescDriver::positionCallback, this);
+      duty_cycle_sub_ = private_nh.subscribe("duty_cycle", 10, &VescDriver::dutyCycleCallback, this);
+      current_sub_ = private_nh.subscribe("current", 10, &VescDriver::currentCallback, this);
+      brake_sub_ = private_nh.subscribe("brake", 10, &VescDriver::brakeCallback, this);
+      speed_sub_ = private_nh.subscribe("speed", 10, &VescDriver::speedCallback, this);
+      position_sub_ = private_nh.subscribe("position", 10, &VescDriver::positionCallback, this);
         
     }
 
@@ -117,8 +108,11 @@ namespace vesc_driver {
     void VescDriver::positionCallback(const std_msgs::Float64::ConstPtr &position) 
     {
       // ROS uses radians but VESC seems to use degrees. Convert to degrees.
-      double position_deg = position_limit_.clip(position->data) * 180.0 / M_PI;
+      // double position_deg = position_limit_.clip(position->data) * 180.0 / M_PI;
+      double position_deg = position_limit_.clip(position->data);
       vesc_.setPosition(position_deg);
+      printf("Pos value: %f/n", position_deg);
+      printf("Pos ang: %f/n", position->data);
     }
 //
     void VescDriver::waitForStateAndPublish() {
@@ -141,6 +135,9 @@ namespace vesc_driver {
         state_msg->state.energy_regen = vesc_status.energy_regen;
         state_msg->state.displacement = vesc_status.current_pid_position;
         state_msg->state.distance_traveled = vesc_status.distance_traveled;
+        state_msg->state.adc_1 = vesc_status.ext_adc1;
+        state_msg->state.adc_2 = vesc_status.ext_adc2;
+        state_msg->state.adc_3 = vesc_status.ext_adc3;
         state_msg->state.fault_code = vesc_status.fault_code;
 
         state_pub_.publish(state_msg);

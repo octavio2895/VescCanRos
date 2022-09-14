@@ -30,4 +30,7 @@ float64 energy_drawn         # energy drawn from input (watt-hour)
 float64 energy_regen         # energy regenerated to input (watt-hour)
 float64 displacement         # net tachometer (counts)
 float64 distance_traveled    # total tachnometer (counts)
+float64 adc_1
+float64 adc_2
+float64 adc_3
 int32   fault_code

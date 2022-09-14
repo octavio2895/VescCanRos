@@ -59,7 +59,7 @@ class VescDriver
 {
 public:
   // VescDriver(ros::NodeHandle &nh, ros::NodeHandle &private_nh);
-  VescDriver(ros::NodeHandle &nh, ros::NodeHandle &private_nh);
+  VescDriver(ros::NodeHandle &nh, ros::NodeHandle &private_nh, std::string inter_name, int can_dev_id);
   void waitForStateAndPublish();
   void stop();
 

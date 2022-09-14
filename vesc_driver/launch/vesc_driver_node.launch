@@ -1,20 +1,25 @@
-<!-- -*- mode: XML -*- -->
-<launch>
+<?xml version="1.0"?>
+  <launch>
 
-  <arg name="node_name" default="vesc_driver_node" />
+    <!-- Optionally launch in GDB, for debugging -->
+    <arg name="debug" default="false" />
+    <arg if="$(arg debug)" name="launch_prefix" value="xterm -e gdb --args" />
+    <arg unless="$(arg debug)" name="launch_prefix" value="" />
 
-  <!-- Optionally launch in GDB, for debugging -->
-  <arg name="debug" default="false" />
-  <arg if="$(arg debug)" name="launch_prefix" value="xterm -e gdb --args" />
-  <arg unless="$(arg debug)" name="launch_prefix" value="" />
+    <!-- VESC driver parameters -->
+    <arg name="can_interface" default="can0" />
+    <!-- <arg name="can_dev_id" default="75" /> -->
 
-  <!-- VESC driver parameters -->
-  <arg name="port" default="/dev/ttyUSB0" />
-  <arg name="num_motor_pole_pairs" default="10" />
+    <!-- VESC driver node -->
+    <node pkg="vesc_driver" type="vesc_driver_node" name="motor_a" output="screen" launch-prefix="$(arg launch_prefix)">
+      <param name="can_interface" value="$(arg can_interface)" />
+      <param name="can_dev_id" value="85" />
+      <!-- <param name="num_motor_pole_pairs" value="$(arg num_motor_pole_pairs)" /> -->
+    </node>
 
-  <!-- VESC driver node -->
-  <node pkg="vesc_driver" type="vesc_driver_node" name="$(arg node_name)" output="screen" launch-prefix="$(arg launch_prefix)">
-    <param name="port" value="$(arg port)" />
-    <param name="num_motor_pole_pairs" value="$(arg num_motor_pole_pairs)" />
-  </node>
-</launch>
+    <node pkg="vesc_driver" type="vesc_driver_node" name="motor_b" output="screen" launch-prefix="$(arg launch_prefix)">
+      <param name="can_interface" value="$(arg can_interface)" />
+      <param name="can_dev_id" value="54" />
+      <!-- <param name="num_motor_pole_pairs" value="$(arg num_motor_pole_pairs)" /> -->
+    </node>
+  </launch>
