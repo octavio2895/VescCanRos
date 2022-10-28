@@ -13,13 +13,43 @@
     <!-- VESC driver node -->
     <node pkg="vesc_driver" type="vesc_driver_node" name="motor_a" output="screen" launch-prefix="$(arg launch_prefix)">
       <param name="can_interface" value="$(arg can_interface)" />
-      <param name="can_dev_id" value="85" />
+      <param name="can_dev_id" value="70" />
       <!-- <param name="num_motor_pole_pairs" value="$(arg num_motor_pole_pairs)" /> -->
     </node>
 
     <node pkg="vesc_driver" type="vesc_driver_node" name="motor_b" output="screen" launch-prefix="$(arg launch_prefix)">
       <param name="can_interface" value="$(arg can_interface)" />
-      <param name="can_dev_id" value="54" />
+      <param name="can_dev_id" value="198" />
+      <!-- <param name="num_motor_pole_pairs" value="$(arg num_motor_pole_pairs)" /> -->
+    </node>
+
+    <node pkg="vesc_driver" type="vesc_driver_node" name="motor_c" output="screen" launch-prefix="$(arg launch_prefix)">
+      <param name="can_interface" value="$(arg can_interface)" />
+      <param name="can_dev_id" value="88" />
+      <!-- <param name="num_motor_pole_pairs" value="$(arg num_motor_pole_pairs)" /> -->
+    </node>
+    
+    <node pkg="vesc_driver" type="vesc_driver_node" name="motor_d" output="screen" launch-prefix="$(arg launch_prefix)">
+      <param name="can_interface" value="$(arg can_interface)" />
+      <param name="can_dev_id" value="218" />
+      <!-- <param name="num_motor_pole_pairs" value="$(arg num_motor_pole_pairs)" /> -->
+    </node>
+
+    <node pkg="vesc_driver" type="vesc_driver_node" name="motor_3" output="screen" launch-prefix="$(arg launch_prefix)">
+      <param name="can_interface" value="$(arg can_interface)" />
+      <param name="can_dev_id" value="34" />
+      <!-- <param name="num_motor_pole_pairs" value="$(arg num_motor_pole_pairs)" /> -->
+    </node>
+
+    <node pkg="vesc_driver" type="vesc_driver_node" name="motor_4" output="screen" launch-prefix="$(arg launch_prefix)">
+      <param name="can_interface" value="$(arg can_interface)" />
+      <param name="can_dev_id" value="85" />
+      <!-- <param name="num_motor_pole_pairs" value="$(arg num_motor_pole_pairs)" /> -->
+    </node>
+
+    <node pkg="vesc_driver" type="vesc_driver_node" name="motor_2" output="screen" launch-prefix="$(arg launch_prefix)">
+      <param name="can_interface" value="$(arg can_interface)" />
+      <param name="can_dev_id" value="80" />
       <!-- <param name="num_motor_pole_pairs" value="$(arg num_motor_pole_pairs)" /> -->
     </node>
   </launch>
