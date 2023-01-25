@@ -111,8 +111,8 @@ namespace vesc_driver {
       // double position_deg = position_limit_.clip(position->data) * 180.0 / M_PI;
       double position_deg = position_limit_.clip(position->data);
       vesc_.setPosition(position_deg);
-      printf("Pos value: %f/n", position_deg);
-      printf("Pos ang: %f/n", position->data);
+      // printf("Pos value: %f\n", position_deg);
+      // printf("Pos ang: %f\n", position->data);
     }
 //
     void VescDriver::waitForStateAndPublish() {
